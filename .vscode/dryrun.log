@@ -1,0 +1,5 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/bestlb/networks'
+gcc-9 -Wall -g -O2 -Werror -std=gnu99 -I./src ./src/common/error.c  -o ./bin/clinet
+make: Leaving directory '/home/bestlb/networks'
+ 
