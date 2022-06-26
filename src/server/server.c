@@ -44,12 +44,21 @@ int main(int argc, char *argv[])
     error_handling("listen() error");
 
   client_addr_size = sizeof(client_addr);
-  client_socket = accept(server_socket, (struct sockaddr *)&client_socket, &client_addr_size);
+  for (int i = 0; i < 2; ++i)
+  {
+    client_socket = accept(server_socket, (struct sockaddr *)&client_socket, &client_addr_size);
 
-  if (client_socket == -1)
-    error_handling("accept() error");
+    if (client_socket == -1)
+      error_handling("accept() error");
+    ssize_t size1 = write(client_socket, message, sizeof(message));
+    ssize_t size2 = write(client_socket, message, sizeof(message));
+    if (size1 <= 0 || size2 <= 0)
+    {
+      printf("write error!\n");
+    }
+    printf("finished client connect.\n");
+  }
 
-  write(client_socket, message, sizeof(message));
   close(client_socket);
   close(server_socket);
 

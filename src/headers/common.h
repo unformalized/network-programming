@@ -2,5 +2,18 @@
 #define COMMON_H
 
 void error_handling(char *);
+void clear_scanf_buffer();
+
+typedef enum OP_SERV_RESP
+{
+    FAIL,
+    RECEIVE_OPERAND_COUNT_SUCCESS,
+    RECEIVE_OPERAND_VALUE_SUCCESS,
+} op_serv_resp;
+
+int FAIL_VAL = FAIL;
+int RECEIVE_OPERAND_COUNT_SUCCESS_VAL = RECEIVE_OPERAND_COUNT_SUCCESS;
+int RECEIVE_OPERAND_VALUE_SUCCESS_VAL = RECEIVE_OPERAND_VALUE_SUCCESS;
+int FINISH = 0;
 
 #endif
