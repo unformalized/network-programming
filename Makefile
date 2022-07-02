@@ -10,7 +10,7 @@ SRC_DIR = ./src
 COMMON = $(SRC_DIR)/common/error.c $(SRC_DIR)/common/io.c
 
 # 
-CLIENT = $(SRC_DIR)/client/op_client.c
+CLIENT = $(SRC_DIR)/client/op_client2.c
 SERVER = $(SRC_DIR)/server/op_server.c
 
 .PHONY:client

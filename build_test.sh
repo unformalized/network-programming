@@ -8,4 +8,4 @@ testfile="$test_dir$1$c_exe"
 buildfile="$build_dir$1"
 
 gcc $testfile -o $buildfile
-$buildfile
+$buildfile $2 $3
