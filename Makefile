@@ -10,8 +10,8 @@ SRC_DIR = ./src
 COMMON = $(SRC_DIR)/common/error.c $(SRC_DIR)/common/io.c
 
 # 
-CLIENT = $(SRC_DIR)/client/file_client.c
-SERVER = $(SRC_DIR)/server/file_server.c
+CLIENT = $(SRC_DIR)/client/echo_client.c
+SERVER = $(SRC_DIR)/server/echo_multi_process_server.c
 
 .PHONY:client
 client:
