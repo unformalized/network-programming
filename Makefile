@@ -11,7 +11,7 @@ COMMON = $(SRC_DIR)/common/error.c $(SRC_DIR)/common/io.c
 
 # 
 CLIENT = $(SRC_DIR)/client/echo_multi_process_client.c
-SERVER = $(SRC_DIR)/server/echo_store_message_server.c
+SERVER = $(SRC_DIR)/server/echo_io_select_server.c
 
 .PHONY:client
 client:
