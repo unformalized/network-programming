@@ -1,7 +1,0 @@
-{
-  "makefile.extensionOutputFolder": "./.vscode",
-  "files.associations": {
-    "common.h": "c"
-  },
-  "clang-format.fallbackStyle": "",
-}
