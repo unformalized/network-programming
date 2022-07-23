@@ -1,23 +1,21 @@
+#include <arpa/inet.h>
+#include <headers/common.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
-#include <arpa/inet.h>
 #include <sys/socket.h>
-#include <headers/common.h>
+#include <unistd.h>
 
 #define BUF_SIZE 20
 
-int main(int argc, char const *argv[])
-{
+int main(int argc, char const *argv[]) {
     int sock;
     char message[BUF_SIZE];
     struct sockaddr_in my_addr, your_addr;
     socklen_t addr_size;
     int str_len, i;
 
-    if (argc != 2)
-    {
+    if (argc != 2) {
         printf("Usage : %s <port> \n", argv[0]);
         exit(1);
     }
@@ -34,11 +32,11 @@ int main(int argc, char const *argv[])
     if (bind(sock, (struct sockaddr *)&my_addr, sizeof(my_addr)) == -1)
         error_handling("bind() error");
 
-    for (i = 0; i < 3; i++)
-    {
+    for (i = 0; i < 3; i++) {
         sleep(5);
         addr_size = sizeof(your_addr);
-        str_len = recvfrom(sock, message, BUF_SIZE, 0, (struct sockaddr *)&your_addr, &addr_size);
+        str_len = recvfrom(sock, message, BUF_SIZE, 0,
+                           (struct sockaddr *)&your_addr, &addr_size);
 
         printf("Message %d: %s \n", i + 1, message);
     }
