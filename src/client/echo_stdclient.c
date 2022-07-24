@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
 
     while (1) {
         fputs("Input message(Q to quit): ", stdout);
-        fgets("message", BUF_SIZE, stdin);
+        fgets(message, BUF_SIZE, stdin);
         if (!strcmp(message, "q\n") || !strcmp(message, "Q\n"))
             break;
 

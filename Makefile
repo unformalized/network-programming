@@ -10,13 +10,13 @@ SRC_DIR = ./src
 COMMON = $(SRC_DIR)/common/error.c $(SRC_DIR)/common/io.c
 
 # 
-CLIENT = $(SRC_DIR)/client/news_broadcast_sender.c
-SERVER = $(SRC_DIR)/server/news_broadcast_receiver.c
+CLIENT = $(SRC_DIR)/client/echo_stdclient.c
+SERVER = $(SRC_DIR)/server/echo_stdserv.c
 
 .PHONY:client
 client:
 	$(CC) $(CFLAGS) -I$(SRC_DIR) $(COMMON) $(CLIENT) -o $(BIN_CLIENT)
-	$(BIN_CLIENT) 255.255.255.255 9190
+	$(BIN_CLIENT) 127.0.0.1 9190
 
 .PHONY:server
 server:
