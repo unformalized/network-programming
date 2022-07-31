@@ -8,7 +8,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#define BUF_SIZE 100
+#define BUF_SIZE 4
 #define EPOLL_SIZE 50
 
 int main(int argc, char *argv[]) {
@@ -52,6 +52,8 @@ int main(int argc, char *argv[]) {
             puts("epoll_wait() error");
             break;
         }
+
+        puts("return epoll_wait");
 
         for (i = 0; i < event_cnt; i++) {
             // 当服务端 sock 有数据读取时，说明有客户端进行连接

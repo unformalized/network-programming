@@ -10,8 +10,8 @@ SRC_DIR = ./src
 COMMON = $(SRC_DIR)/common/error.c $(SRC_DIR)/common/io.c
 
 # 
-CLIENT = $(SRC_DIR)/client/sep_client.c
-SERVER = $(SRC_DIR)/server/sep_serv2.c
+CLIENT = $(SRC_DIR)/client/echo_client2.c
+SERVER = $(SRC_DIR)/server/echo_ep_edge_trigger_serv.c
 
 .PHONY:client
 client:

@@ -1,4 +1,7 @@
 #include <arpa/inet.h>
+#include <asm-generic/errno-base.h>
+#include <errno.h>
+#include <fcntl.h>
 #include <headers/common.h>
 #include <netinet/in.h>
 #include <stdio.h>
@@ -8,8 +11,10 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#define BUF_SIZE 100
+#define BUF_SIZE 4
 #define EPOLL_SIZE 50
+
+void setnonblockingmode(int fd);
 
 int main(int argc, char *argv[]) {
     int serv_sock, client_sock;
@@ -41,6 +46,8 @@ int main(int argc, char *argv[]) {
     epfd = epoll_create(EPOLL_SIZE);
     ep_events = malloc(sizeof(struct epoll_event) * EPOLL_SIZE);
 
+    // 设置非阻塞 I/O
+    setnonblockingmode(serv_sock);
     event.events = EPOLLIN;
     event.data.fd = serv_sock;
     // 为 sock 向 epoll 添加监视事件
@@ -53,26 +60,40 @@ int main(int argc, char *argv[]) {
             break;
         }
 
+        puts("return epoll_wait");
+
         for (i = 0; i < event_cnt; i++) {
             // 当服务端 sock 有数据读取时，说明有客户端进行连接
             if (ep_events[i].data.fd == serv_sock) {
                 addr_size = sizeof(client_addr);
                 client_sock = accept(serv_sock, (struct sockaddr *)&client_addr,
                                      &addr_size);
-                event.events = EPOLLIN;
+                // 设置边缘方式触发
+                event.events = EPOLLIN | EPOLLET;
                 event.data.fd = client_sock;
                 // 添加客户端 sock 到 epoll 监视事件中
                 epoll_ctl(epfd, EPOLL_CTL_ADD, client_sock, &event);
                 printf("connected client: %d\n", client_sock);
             } else {
-                str_len = read(ep_events[i].data.fd, buf, BUF_SIZE);
-                if (str_len == 0) {
-                    // 客户端关闭
-                    epoll_ctl(epfd, EPOLL_CTL_DEL, ep_events[i].data.fd, NULL);
-                    close(ep_events[i].data.fd);
-                    printf("close client: %d \n", ep_events[i].data.fd);
-                } else {
-                    write(ep_events[i].data.fd, buf, str_len);
+                // 因为边缘方式下只会触发一次，因此需要使用 while
+                // 循环读取全部数据 当输入缓冲的数据已全部读取完，通过 errno
+                // 判断退出
+                while (1) {
+                    str_len = read(ep_events[i].data.fd, buf, BUF_SIZE);
+                    if (str_len == 0) {
+                        // 客户端关闭
+                        epoll_ctl(epfd, EPOLL_CTL_DEL, ep_events[i].data.fd,
+                                  NULL);
+                        close(ep_events[i].data.fd);
+                        printf("close client: %d \n", ep_events[i].data.fd);
+                        break;
+                    } else if (str_len < 0) {
+                        // 输入缓冲的数据已全部读取完
+                        if (errno == EAGAIN)
+                            break;
+                    } else {
+                        write(ep_events[i].data.fd, buf, str_len);
+                    }
                 }
             }
         }
@@ -80,4 +101,9 @@ int main(int argc, char *argv[]) {
     close(serv_sock);
     close(epfd);
     return 0;
+}
+
+void setnonblockingmode(int fd) {
+    int flag = fcntl(fd, F_GETFL, 0);
+    fcntl(fd, F_SETFL, flag | O_NONBLOCK);
 }
