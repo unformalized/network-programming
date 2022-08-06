@@ -10,17 +10,19 @@ SRC_DIR = ./src
 COMMON = $(SRC_DIR)/common/error.c $(SRC_DIR)/common/io.c
 
 # 
-CLIENT = $(SRC_DIR)/client/echo_client2.c
-SERVER = $(SRC_DIR)/server/echo_ep_edge_trigger_serv.c
+CLIENT = $(SRC_DIR)/client/chat_client.c
+SERVER = $(SRC_DIR)/server/chat_server.c
+
+THREAD_OPTIONS = -D_REENTRANT -lpthread
 
 .PHONY:client
 client:
-	$(CC) $(CFLAGS) -I$(SRC_DIR) $(COMMON) $(CLIENT) -o $(BIN_CLIENT)
-	$(BIN_CLIENT) 127.0.0.1 9190
+	$(CC) $(CFLAGS) -I$(SRC_DIR) $(COMMON) $(THREAD_OPTIONS) $(CLIENT) -o $(BIN_CLIENT)
+#	$(BIN_CLIENT) 127.0.0.1 9190
 
 .PHONY:server
 server:
-	$(CC) $(CFLAGS) -I$(SRC_DIR) $(COMMON) $(SERVER) -o $(BIN_SERVER)
+	$(CC) $(CFLAGS) -I$(SRC_DIR) $(COMMON) $(THREAD_OPTIONS) $(SERVER) -o $(BIN_SERVER)
 	$(BIN_SERVER) 9190
 
 
