@@ -11,7 +11,7 @@ COMMON = $(SRC_DIR)/common/error.c $(SRC_DIR)/common/io.c
 
 # 
 CLIENT = $(SRC_DIR)/client/chat_client.c
-SERVER = $(SRC_DIR)/server/chat_server.c
+SERVER = $(SRC_DIR)/server/webserv.c
 
 THREAD_OPTIONS = -D_REENTRANT -lpthread
 
